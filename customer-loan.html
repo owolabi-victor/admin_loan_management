@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for a Loan - Still Pay</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            background-color: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        
+        .title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #00A884;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #00A884;
+        }
+        
+        .apply-button {
+            width: 100%;
+            padding: 16px;
+            background-color: #00A884;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            margin-top: 24px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .apply-button:hover {
+            background-color: #008f6f;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.success {
+            background-color: #00A884;
+        }
+        
+        .notification.error {
+            background-color: #ff3333;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+    
+    <div class="app-container">
+        <h1 class="title">Loan Application</h1>
+        
+        <form id="loan-application-form">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="loanAmount">Loan Amount</label>
+                <input type="text" id="loanAmount" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="loanPlan">Loan Payment Plan</label>
+                <select id="loanPlan" required>
+                    <option value="12">12 Months</option>
+                    <option value="24">24 Months</option>
+                    <option value="36">36 Months</option>
+                    <option value="48">48 Months</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="loanPurpose">Loan Purpose</label>
+                <select id="loanPurpose" required>
+                    <option value="Home Improvement">Home Improvement</option>
+                    <option value="Debt Consolidation">Debt Consolidation</option>
+                    <option value="Education">Education</option>
+                    <option value="Business">Business</option>
+                    <option value="Medical Expenses">Medical Expenses</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="apply-button">Submit Application</button>
+        </form>
+    </div>
+    
+    <script>
+        // Notification function
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.className = 'notification';
+            }, 3000);
+        }
+
+        // Currency formatting
+        function formatCurrency(input) {
+            let value = input.value.replace(/\D/g, '');
+            value = new Intl.NumberFormat().format(value);
+            input.value = value;
+        }
+
+        // Parse currency string to number
+        function parseCurrency(value) {
+            return parseFloat(value.replace(/,/g, ''));
+        }
+
+        // Initialize currency formatting
+        document.addEventListener('DOMContentLoaded', function() {
+            const loanAmountInput = document.getElementById('loanAmount');
+            
+            // Format initial value
+            formatCurrency(loanAmountInput);
+            
+            // Add input event listener for formatting
+            loanAmountInput.addEventListener('input', function() {
+                formatCurrency(this);
+            });
+        });
+
+        // Form Submission Handler
+        document.getElementById('loan-application-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const loan = {
+                id: Date.now(), // Unique identifier
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                loanAmount: document.getElementById('loanAmount').value,
+                loanPlan: document.getElementById('loanPlan').value,
+                loanPurpose: document.getElementById('loanPurpose').value,
+                status: 'Pending', // Default status
+                submissionDate: new Date().toISOString()
+            };
+
+            // Store loan in localStorage
+            let loans = JSON.parse(localStorage.getItem('pendingLoans')) || [];
+            loans.push(loan);
+            localStorage.setItem('pendingLoans', JSON.stringify(loans));
+
+            // Show success notification
+            showNotification('Loan Application Submitted Successfully', 'success');
+
+            // Reset form
+            this.reset();
+
+            // Optional: Redirect to customer dashboard or show application status
+            setTimeout(() => {
+                window.location.href = 'customer-dashboard.html';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking App</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    
+    <!-- Mobile View -->
+    <div class="app-container mobile-view" id="mobileView">
+        <div class="app-header">
+            <div class="user-info">
+                <div class="avatar">
+                    <img src="/api/placeholder/40/40" alt="User Avatar">
+                </div>
+                <div>
+                    <p>Hello,</p>
+                    <h3>Andrew!</h3>
+                </div>
+            </div>
+            <div class="notification" id="notificationBell">
+                <span>🔔</span>
+                <span class="notification-badge">2</span>
+            </div>
+        </div>
+        
+        <div class="balance-card">
+            <p class="balance-label">Your Balance</p>
+            <div class="balance-amount">
+                <span id="balanceText">NGN 30,000.00</span>
+                <span class="eye-icon" id="toggleBalance">👁️</span>
+            </div>
+            <p class="account-number">0000 7426 2183</p>
+        </div>
+        
+        <div class="quick-actions">
+            <div class="action-button" id="takeLoanBtn">
+                <span class="action-icon">💰</span>
+                <span class="action-label">Take Loan</span>
+            </div>
+            <div class="action-button" id="payLoanBtn">
+                <span class="action-icon">💳</span>
+                <span class="action-label">Pay Loan</span>
+            </div>
+            <div class="action-button" id="checkStatusBtn">
+                <span class="action-icon">📊</span>
+                <span class="action-label">Check Status</span>
+            </div>
+            <div class="action-button" id="buyAirtimeBtn">
+                <span class="action-icon">📱</span>
+                <span class="action-label">Buy Airtime</span>
+            </div>
+        </div>
+        
+        <div class="transactions-section">
+            <h3 class="section-title">Transactions</h3>
+            
+            <div class="transaction-item" data-id="tx1">
+                <div class="transaction-info">
+                    <div class="transaction-icon">📱</div>
+                    <div class="transaction-details">
+                        <span class="transaction-type">Buy Airtime</span>
+                        <span class="transaction-date">14th February, 2025</span>
+                    </div>
+                </div>
+                <div class="transaction-amount">NGN5,000</div>
+            </div>
+            
+            <div class="transaction-item" data-id="tx2">
+                <div class="transaction-info">
+                    <div class="transaction-icon">↘️</div>
+                    <div class="transaction-details">
+                        <span class="transaction-type">Receive</span>
+                        <span class="transaction-date">11th December, 2024</span>
+                    </div>
+                </div>
+                <div class="transaction-amount">NGN300,000</div>
+            </div>
+            
+            <div class="transaction-item" data-id="tx3">
+                <div class="transaction-info">
+                    <div class="transaction-icon">💰</div>
+                    <div class="transaction-details">
+                        <span class="transaction-type">Take Loan</span>
+                        <span class="transaction-date">8th October, 2024</span>
+                    </div>
+                </div>
+                <div class="transaction-amount">NGN200,000</div>
+            </div>
+        </div>
+        
+        <div class="bottom-nav">
+            <div class="nav-item active-nav" id="homeNav">
+                <span class="nav-icon">🏦</span>
+            </div>
+            <div class="nav-item" id="messagesNav">
+                <span class="nav-icon">✉️</span>
+            </div>
+            <div class="nav-item" id="profileNav">
+                <span class="nav-icon">👤</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Web View -->
+    <div class="app-container web-view" id="webView">
+        <div class="sidebar">
+            <div class="logo">BankApp</div>
+            <div class="sidebar-nav">
+                <div class="sidebar-nav-item active" data-page="dashboard">
+                    <span>🏠</span>
+                    <span>Dashboard</span>
+                </div>
+                <div class="sidebar-nav-item" data-page="cards">
+                    <span>💳</span>
+                    <span>Cards</span>
+                </div>
+                <div class="sidebar-nav-item" data-page="analytics">
+                    <span>📊</span>
+                    <span>Analytics</span>
+                </div>
+                <div class="sidebar-nav-item" data-page="loans">
+                    <span>💰</span>
+                    <span>Loans</span>
+                </div>
+                <div class="sidebar-nav-item" data-page="airtime">
+                    <span>📱</span>
+                    <span>Airtime</span>
+                </div>
+                <div class="sidebar-nav-item" data-page="settings">
+                    <span>⚙️</span>
+                    <span>Settings</span>
+                </div>
+            </div>
+            <div class="user-info" style="margin-top: auto; padding-top: 20px; border-top: 1px solid #eee;">
+                <div class="avatar">
+                    <img src="/api/placeholder/40/40" alt="User Avatar">
+                </div>
+                <div>
+                    <p>Andrew</p>
+                    <p style="font-size: 12px; color: #666;">Personal Account</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="dashboard-header">
+                <h2>Dashboard</h2>
+                <div class="notification" id="webNotificationBell">
+                    <span>🔔</span>
+                    <span class="notification-badge">2</span>
+                </div>
+            </div>
+            
+            <div class="cards-container">
+                <div class="balance-card">
+                    <p class="balance-label">Your Balance</p>
+                    <div class="balance-amount">
+                        <span id="webBalanceText">NGN 30,000.00</span>
+                        <span class="eye-icon" id="webToggleBalance">👁️</span>
+                    </div>
+                    <p class="account-number">0000 7426 2183</p>
+                </div>
+                
+                <div class="balance-card" style="background-color: #4A90E2;">
+                    <p class="balance-label">Savings</p>
+                    <div class="balance-amount">
+                        <span id="savingsBalanceText">NGN 125,000.00</span>
+                        <span class="eye-icon" id="webToggleSavings">👁️</span>
+                    </div>
+                    <p class="account-number">Interest Rate: 3.5%</p>
+                </div>
+            </div>
+            
+            <h3 class="section-title">Quick Actions</h3>
+            <div class="quick-actions" style="margin-bottom: 30px;">
+                <div class="action-button" id="webTakeLoanBtn">
+                    <span class="action-icon">💰</span>
+                    <span class="action-label">Take Loan</span>
+                </div>
+                <div class="action-button" id="webPayLoanBtn">
+                    <span class="action-icon">💳</span>
+                    <span class="action-label">Pay Loan</span>
+                </div>
+                <div class="action-button" id="webCheckStatusBtn">
+                    <span class="action-icon">📊</span>
+                    <span class="action-label">Check Status</span>
+                </div>
+                <div class="action-button" id="webBuyAirtimeBtn">
+                    <span class="action-icon">📱</span>
+                    <span class="action-label">Buy Airtime</span>
+                </div>
+            </div>
+            
+            <div class="transactions-section">
+                <h3 class="section-title">Recent Transactions</h3>
+                
+                <div class="transaction-item" data-id="tx1">
+                    <div class="transaction-info">
+                        <div class="transaction-icon">📱</div>
+                        <div class="transaction-details">
+                            <span class="transaction-type">Buy Airtime</span>
+                            <span class="transaction-date">14th February, 2025</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount">NGN5,000</div>
+                </div>
+                
+                <div class="transaction-item" data-id="tx2">
+                    <div class="transaction-info">
+                        <div class="transaction-icon">↘️</div>
+                        <div class="transaction-details">
+                            <span class="transaction-type">Receive</span>
+                            <span class="transaction-date">11th December, 2024</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount">NGN300,000</div>
+                </div>
+                
+                <div class="transaction-item" data-id="tx3">
+                    <div class="transaction-info">
+                        <div class="transaction-icon">💰</div>
+                        <div class="transaction-details">
+                            <span class="transaction-type">Take Loan</span>
+                            <span class="transaction-date">8th October, 2024</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount">NGN200,000</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <span id="closeNotifications">✕</span>
+        </div>
+        <div class="notification-list">
+            <div class="notification-item unread">
+                <div class="notification-title">Loan Approved</div>
+                <div class="notification-text">Your loan application of NGN200,000 has been approved.</div>
+                <div class="notification-time">2 hours ago</div>
+            </div>
+            <div class="notification-item unread">
+                <div class="notification-title">Payment Received</div>
+                <div class="notification-text">You have received NGN300,000 from John Doe.</div>
+                <div class="notification-time">Yesterday</div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-title">Airtime Purchase</div>
+                <div class="notification-text">You've successfully purchased NGN5,000 airtime.</div>
+                <div class="notification-time">14 Feb 2025</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Details Panel -->
+    <div class="transaction-details-panel" id="transactionDetailsPanel">
+        <div class="transaction-details-header">
+            <div class="transaction-details-title">Transaction Details</div>
+            <div class="transaction-details-close" id="closeTransactionDetails">✕</div>
+        </div>
+        <div class="transaction-details-content" id="transactionDetailsContent">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Take Loan Modal -->
+    <div class="modal-overlay" id="takeLoanModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Apply for a Loan</h3>
+                <span class="modal-close" data-modal="takeLoanModal">✕</span>
+            </div>
+            <form id="loanForm">
+                <div class="form-group">
+                    <label class="form-label">Loan Amount (NGN)</label>
+                    <input type="number" id="loanFormAmount" class="form-input" placeholder="Enter amount" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Duration (months)</label>
+                    <input type="number" id="loanFormDuration" class="form-input" placeholder="Enter duration" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Purpose</label>
+                    <select id="loanFormPurpose" class="form-input">
+                        <option value="">Select purpose</option>
+                        <option value="business">Business</option>
+                        <option value="education">Education</option>
+                        <option value="personal">Personal</option>
+                        <option value="housing">Housing</option>
+                    </select>
+                </div>
+                <button type="submit" class="form-button">Apply Now</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pay Loan Modal -->
+    <div class="modal-overlay" id="payLoanModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Pay Loan</h3>
+                <span class="modal-close" data-modal="payLoanModal">✕</span>
+            </div>
+            <form id="payLoanForm">
+                <div class="form-group">
+                    <label class="form-label">Outstanding Balance</label>
+                    <div class="form-input" style="background-color: #f5f5f5;">NGN 180,000.00</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Payment Amount (NGN)</label>
+                    <input type="number" class="form-input" placeholder="Enter amount" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Payment Method</label>
+                    <select class="form-input">
+                        <option value="">Select method</option>
+                        <option value="account">Account Balance</option>
+                        <option value="card">Debit Card</option>
+                        <option value="bank">Bank Transfer</option>
+                    </select>
+                </div>
+                <button type="submit" class="form-button">Make Payment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Buy Airtime Modal -->
+    <div class="modal-overlay" id="buyAirtimeModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Buy Airtime</h3>
+                <span class="modal-close" data-modal="buyAirtimeModal">✕</span>
+            </div>
+            <form id="airtimeForm">
+                <div class="form-group">
+                    <label class="form-label">Mobile Number</label>
+                    <input type="tel" class="form-input" placeholder="Enter phone number" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Network Provider</label>
+                    <select class="form-input">
+                        <option value="">Select provider</option>
+                        <option value="mtn">MTN</option>
+                        <option value="airtel">Airtel</option>
+                        <option value="glo">Glo</option>
+                        <option value="9mobile">9mobile</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Amount (NGN)</label>
+                    <input type="number" class="form-input" placeholder="Enter amount" required>
+                </div>
+                <button type="submit" class="form-button">Purchase Airtime</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Check Status Modal -->
+    <div class="modal-overlay" id="checkStatusModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Loan Status</h3>
+                <span class="modal-close" data-modal="checkStatusModal">✕</span>
+            </div>
+            <div class="transaction-details-content">
+                <div class="transaction-details-item">
+                    <span class="detail-label">Loan Amount</span>
+                    <span class="detail-value">NGN 200,000.00</span>
+                </div>
+                <div class="transaction-details-item">
+                    <span class="detail-label">Date Approved</span>
+                    <span class="detail-value">8th October, 2024</span>
+                </div>
+                <div class="transaction-details-item">
+                    <span class="detail-label">Outstanding Balance</span>
+                    <span class="detail-value">NGN 180,000.00</span>
+                </div>
+                <div class="transaction-details-item">
+                    <span class="detail-label">Next Payment</span>
+                    <span class="detail-value">25th March, 2025</span>
+                </div>
+                <div class="transaction-details-item">
+                    <span class="detail-label">Status</span>
+                    <span class="detail-value" style="color: green;">Active</span>
+                </div>
+            </div>
+            <button class="form-button" style="margin-top: 20px;" id="viewPaymentHistoryBtn">View Payment History</button>
+        </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

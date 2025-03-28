@@ -1,0 +1,66 @@
+<!-- customer-dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Loan Application - Still Pay</title>
+    <link rel="stylesheet" href="customer-dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1 class="title">My Loan Applications</h1>
+        
+        <div id="loanApplications">
+            <!-- Loan applications will be dynamically added here -->
+        </div>
+
+        <a href="customer-loan.html" class="back-button">Apply for New Loan</a>
+        <a href="dashboard.html" class="back-button">Back to Dashboard</a>
+    </div>
+
+    <script>
+        function renderLoanApplications() {
+            const loanApplicationsContainer = document.getElementById('loanApplications');
+            loanApplicationsContainer.innerHTML = ''; // Clear existing content
+
+            // Combine pending, approved, and rejected loans
+            const pendingLoans = JSON.parse(localStorage.getItem('pendingLoans')) || [];
+            const approvedLoans = JSON.parse(localStorage.getItem('approvedLoans')) || [];
+            const rejectedLoans = JSON.parse(localStorage.getItem('rejectedLoans')) || [];
+
+            const allLoans = [...pendingLoans, ...approvedLoans, ...rejectedLoans];
+
+            if (allLoans.length === 0) {
+                loanApplicationsContainer.innerHTML = `
+                    <div class="no-applications">
+                        No loan applications found.
+                    </div>
+                `;
+                return;
+            }
+
+            allLoans.forEach(loan => {
+                let statusClass = 'status-pending';
+                if (loan.status === 'Approved') statusClass = 'status-approved';
+                if (loan.status === 'Rejected') statusClass = 'status-rejected';
+
+                const loanCard = document.createElement('div');
+                loanCard.classList.add('loan-card');
+                loanCard.innerHTML = `
+                    <div class="loan-status ${statusClass}">${loan.status}</div>
+                    <div class="loan-details">
+                        <p><strong>Amount:</strong> ₦${loan.loanAmount}</p>
+                        <p><strong>Purpose:</strong> ${loan.loanPurpose}</p>
+                        <p><strong>Submission Date:</strong> ${new Date(loan.submissionDate).toLocaleDateString()}</p>
+                    </div>
+                `;
+                loanApplicationsContainer.appendChild(loanCard);
+            });
+        }
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', renderLoanApplications);
+    </script>
+</body>
+</html>

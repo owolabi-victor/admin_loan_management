@@ -1,0 +1,124 @@
+<!-- admin-dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Loan Applications</title>
+   <link rel="stylesheet" href="admin-dashboard.css">
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-logo">Admin Dashboard</div>
+        </div>
+
+        <div class="main-content">
+            <h1>Pending Loan Applications</h1>
+            <table class="loan-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Loan Amount</th>
+                        <th>Purpose</th>
+                        <th>Submission Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="pendingLoansBody">
+                    <!-- Loan applications will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Notification function
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.className = 'notification';
+            }, 3000);
+        }
+
+        // Render pending loans
+        function renderPendingLoans() {
+            const pendingLoansBody = document.getElementById('pendingLoansBody');
+            pendingLoansBody.innerHTML = ''; // Clear existing rows
+
+            // Retrieve pending loans from localStorage
+            const loans = JSON.parse(localStorage.getItem('pendingLoans')) || [];
+
+            loans.forEach((loan, index) => {
+                // Skip already processed loans
+                if (loan.status !== 'Pending') return;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${loan.fullName}</td>
+                    <td>${loan.email}</td>
+                    <td>₦${loan.loanAmount}</td>
+                    <td>${loan.loanPurpose}</td>
+                    <td>${new Date(loan.submissionDate).toLocaleDateString()}</td>
+                    <td><span class="status-badge status-pending">${loan.status}</span></td>
+                    <td class="action-buttons">
+                        <button class="btn btn-approve" onclick="approveLoan(${loan.id})">Approve</button>
+                        <button class="btn btn-reject" onclick="rejectLoan(${loan.id})">Reject</button>
+                    </td>
+                `;
+                pendingLoansBody.appendChild(row);
+            });
+        }
+
+        // Approve loan
+        function approveLoan(loanId) {
+            const loans = JSON.parse(localStorage.getItem('pendingLoans')) || [];
+            const updatedLoans = loans.map(loan => {
+                if (loan.id === loanId) {
+                    loan.status = 'Approved';
+                    
+                    // Store in approved loans
+                    const approvedLoans = JSON.parse(localStorage.getItem('approvedLoans')) || [];
+                    approvedLoans.push(loan);
+                    localStorage.setItem('approvedLoans', JSON.stringify(approvedLoans));
+                }
+                return loan;
+            });
+
+            localStorage.setItem('pendingLoans', JSON.stringify(updatedLoans));
+            renderPendingLoans();
+            showNotification('Loan Approved', 'success');
+        }
+
+        // Reject loan
+        function rejectLoan(loanId) {
+            const loans = JSON.parse(localStorage.getItem('pendingLoans')) || [];
+            const updatedLoans = loans.map(loan => {
+                if (loan.id === loanId) {
+                    loan.status = 'Rejected';
+                    
+                    // Store in rejected loans
+                    const rejectedLoans = JSON.parse(localStorage.getItem('rejectedLoans')) || [];
+                    rejectedLoans.push(loan);
+                    localStorage.setItem('rejectedLoans', JSON.stringify(rejectedLoans));
+                }
+                return loan;
+            });
+
+            localStorage.setItem('pendingLoans', JSON.stringify(updatedLoans));
+            renderPendingLoans();
+            showNotification('Loan Rejected', 'error');
+        }
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', renderPendingLoans);
+    </script>
+</body>
+</html>
