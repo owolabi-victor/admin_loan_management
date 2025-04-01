@@ -1,124 +1,1220 @@
-<!-- admin-dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Loan Applications</title>
-   <link rel="stylesheet" href="admin-dashboard.css">
+    <title>Loan Management System - Admin Dashboard</title>
+    <link rel="stylesheet" href="admin-dashboard.css">
+    <link rel="stylesheet" href="admin-dashboard1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
     <div class="notification" id="notification"></div>
 
     <div class="dashboard-container">
         <div class="sidebar">
-            <div class="sidebar-logo">Admin Dashboard</div>
+            <div class="sidebar-logo">Loan Management</div>
+            <div class="sidebar-menu">
+                <a href="#dashboard" class="menu-item active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#loan-management" class="menu-item" data-section="loan-management">
+                    <i class="fas fa-money-bill-wave"></i> Loan Management
+                </a>
+                <a href="#repayment-tracking" class="menu-item" data-section="repayment-tracking">
+                    <i class="fas fa-calendar-check"></i> Repayment Tracking
+                </a>
+                <a href="#debt-recovery" class="menu-item" data-section="debt-recovery">
+                    <i class="fas fa-hand-holding-usd"></i> Debt Recovery
+                </a>
+                <a href="#customer-management" class="menu-item" data-section="customer-management">
+                    <i class="fas fa-users"></i> Customer Management
+                </a>
+                <a href="#reporting" class="menu-item" data-section="reporting">
+                    <i class="fas fa-chart-bar"></i> Reporting & Analytics
+                </a>
+                <a href="#settings" class="menu-item" data-section="settings">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+                <a href="#audit" class="menu-item" data-section="audit">
+                    <i class="fas fa-clipboard-check"></i> Audit & Compliance
+                </a>
+            </div>
         </div>
 
         <div class="main-content">
-            <h1>Pending Loan Applications</h1>
-            <table class="loan-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Loan Amount</th>
-                        <th>Purpose</th>
-                        <th>Submission Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="pendingLoansBody">
-                    <!-- Loan applications will be dynamically added here -->
-                </tbody>
-            </table>
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <h1><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h1>
+                
+                <div class="kpi-cards">
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fas fa-money-bill-wave"></i></div>
+                        <div class="kpi-content">
+                            <h3>Total Loans Outstanding</h3>
+                            <h2 id="totalLoansOutstanding">₦0</h2>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                        <div class="kpi-content">
+                            <h3>Total Repayments Due</h3>
+                            <h2 id="totalRepaymentsDue">₦0</h2>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fas fa-percentage"></i></div>
+                        <div class="kpi-content">
+                            <h3>Debt Recovery Rate</h3>
+                            <h2 id="debtRecoveryRate">0%</h2>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fas fa-water"></i></div>
+                        <div class="kpi-content">
+                            <h3>Liquidity Position</h3>
+                            <h2 id="liquidityPosition">₦0</h2>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-charts">
+                    <div class="chart-container">
+                        <h3>Loan Distribution</h3>
+                        <canvas id="loanDistributionChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Monthly Repayments</h3>
+                        <canvas id="monthlyRepaymentsChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="recent-activities">
+                    <h3>Recent Activities</h3>
+                    <div class="activity-list" id="recentActivities">
+                        <!-- Activities will be loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loan Management Section -->
+            <section id="loan-management" class="content-section">
+                <h1><i class="fas fa-money-bill-wave"></i> Loan Management</h1>
+                
+                <div class="section-tabs">
+                    <button class="tab-button active" data-tab="pending-loans">Pending Applications</button>
+                    <button class="tab-button" data-tab="approved-loans">Approved Loans</button>
+                    <button class="tab-button" data-tab="rejected-loans">Rejected Applications</button>
+                    <button class="tab-button" data-tab="loan-origination">Loan Origination</button>
+                </div>
+                
+                <div id="pending-loans" class="tab-content active">
+                    <h2>Pending Loan Applications</h2>
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Loan Amount</th>
+                                <th>Purpose</th>
+                                <th>Submission Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingLoansBody">
+                            <!-- Pending loans will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="approved-loans" class="tab-content">
+                    <h2>Approved Loans</h2>
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Loan Amount</th>
+                                <th>Purpose</th>
+                                <th>Approval Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="approvedLoansBody">
+                            <!-- Approved loans will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="rejected-loans" class="tab-content">
+                    <h2>Rejected Applications</h2>
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Loan Amount</th>
+                                <th>Purpose</th>
+                                <th>Rejection Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rejectedLoansBody">
+                            <!-- Rejected loans will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="loan-origination" class="tab-content">
+                    <h2>Loan Origination</h2>
+                    <form id="loanOriginationForm" class="form-container">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="customerName">Customer Name</label>
+                                <input type="text" id="customerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerEmail">Email</label>
+                                <input type="email" id="customerEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="customerPhone">Phone</label>
+                                <input type="tel" id="customerPhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loanAmount">Loan Amount (₦)</label>
+                                <input type="number" id="loanAmount" min="1000" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="loanTermMonths">Term (Months)</label>
+                                <input type="number" id="loanTermMonths" min="1" max="60" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="interestRate">Interest Rate (%)</label>
+                                <input type="number" id="interestRate" min="1" max="100" step="0.1" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="loanPurpose">Loan Purpose</label>
+                                <select id="loanPurpose" required>
+                                    <option value="">Select Purpose</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Personal">Personal</option>
+                                    <option value="Home">Home</option>
+                                    <option value="Medical">Medical</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="loanDetails">Additional Details</label>
+                                <textarea id="loanDetails" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Create Loan</button>
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Repayment Tracking Section -->
+            <section id="repayment-tracking" class="content-section">
+                <h1><i class="fas fa-calendar-check"></i> Repayment Tracking</h1>
+                
+                <div class="section-tabs">
+                    <button class="tab-button active" data-tab="repayment-schedule">Repayment Schedule</button>
+                    <button class="tab-button" data-tab="payment-history">Payment History</button>
+                    <button class="tab-button" data-tab="overdue-payments">Overdue Payments</button>
+                    <button class="tab-button" data-tab="record-payment">Record Payment</button>
+                </div>
+                
+                <div id="repayment-schedule" class="tab-content active">
+                    <h2>Repayment Schedule</h2>
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <label for="repaymentCustomerFilter">Customer:</label>
+                            <select id="repaymentCustomerFilter">
+                                <option value="all">All Customers</option>
+                                <!-- Customers will be added dynamically -->
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="repaymentDateFilter">Month:</label>
+                            <input type="month" id="repaymentDateFilter">
+                        </div>
+                        <button id="applyRepaymentFilter" class="btn btn-filter">Apply Filter</button>
+                    </div>
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Loan ID</th>
+                                <th>Amount Due</th>
+                                <th>Due Date</th>
+                                <th>Days Remaining</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="repaymentScheduleBody">
+                            <!-- Repayment schedules will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="payment-history" class="tab-content">
+                    <h2>Payment History</h2>
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <label for="paymentHistoryCustomerFilter">Customer:</label>
+                            <select id="paymentHistoryCustomerFilter">
+                                <option value="all">All Customers</option>
+                                <!-- Customers will be added dynamically -->
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="paymentHistoryDateRange">Date Range:</label>
+                            <input type="date" id="paymentHistoryStartDate">
+                            <span>to</span>
+                            <input type="date" id="paymentHistoryEndDate">
+                        </div>
+                        <button id="applyPaymentHistoryFilter" class="btn btn-filter">Apply Filter</button>
+                    </div>
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Loan ID</th>
+                                <th>Payment Date</th>
+                                <th>Amount Paid</th>
+                                <th>Payment Method</th>
+                                <th>Reference</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentHistoryBody">
+                            <!-- Payment history will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="overdue-payments" class="tab-content">
+                    <h2>Overdue Payments</h2>
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Loan ID</th>
+                                <th>Amount Due</th>
+                                <th>Due Date</th>
+                                <th>Days Overdue</th>
+                                <th>Contact</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="overduePaymentsBody">
+                            <!-- Overdue payments will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="record-payment" class="tab-content">
+                    <h2>Record Payment</h2>
+                    <form id="recordPaymentForm" class="form-container">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="paymentLoanId">Loan ID</label>
+                                <select id="paymentLoanId" required>
+                                    <option value="">Select Loan</option>
+                                    <!-- Active loans will be added dynamically -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="paymentCustomer">Customer</label>
+                                <input type="text" id="paymentCustomer" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="paymentAmount">Payment Amount (₦)</label>
+                                <input type="number" id="paymentAmount" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="paymentDate">Payment Date</label>
+                                <input type="date" id="paymentDate" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="paymentMethod">Payment Method</label>
+                                <select id="paymentMethod" required>
+                                    <option value="">Select Method</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Debit Card">Debit Card</option>
+                                    <option value="Mobile Money">Mobile Money</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="paymentReference">Reference/Receipt No.</label>
+                                <input type="text" id="paymentReference">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="paymentNotes">Notes</label>
+                                <textarea id="paymentNotes" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Record Payment</button>
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Debt Recovery Section -->
+            <section id="debt-recovery" class="content-section">
+                <h1><i class="fas fa-hand-holding-usd"></i> Debt Recovery</h1>
+                
+                <div class="section-tabs">
+                    <button class="tab-button active" data-tab="overdue-accounts">Overdue Accounts</button>
+                    <button class="tab-button" data-tab="recovery-actions">Recovery Actions</button>
+                    <button class="tab-button" data-tab="recovery-agents">Recovery Agents</button>
+                </div>
+                
+                <div id="overdue-accounts" class="tab-content active">
+                    <h2>Overdue Accounts</h2>
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <label for="overdueFilter">Overdue By:</label>
+                            <select id="overdueFilter">
+                                <option value="all">All Overdue</option>
+                                <option value="1-30">1-30 Days</option>
+                                <option value="31-60">31-60 Days</option>
+                                <option value="61-90">61-90 Days</option>
+                                <option value="90+">90+ Days</option>
+                            </select>
+                        </div>
+                        <button id="applyOverdueFilter" class="btn btn-filter">Apply Filter</button>
+                    </div>
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Contact</th>
+                                <th>Loan ID</th>
+                                <th>Outstanding</th>
+                                <th>Days Overdue</th>
+                                <th>Risk Level</th>
+                                <th>Assigned To</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="overdueAccountsBody">
+                            <!-- Overdue accounts will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="recovery-actions" class="tab-content">
+                    <h2>Recovery Actions</h2>
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Loan ID</th>
+                                <th>Action Type</th>
+                                <th>Performed By</th>
+                                <th>Result</th>
+                                <th>Next Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recoveryActionsBody">
+                            <!-- Recovery actions will be added dynamically -->
+                        </tbody>
+                    </table>
+                    <div class="action-bar">
+                        <button id="addRecoveryAction" class="btn btn-primary">Add Recovery Action</button>
+                    </div>
+                </div>
+                
+                <div id="recovery-agents" class="tab-content">
+                    <h2>Recovery Agents</h2>
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Agent Name</th>
+                                <th>Contact</th>
+                                <th>Assigned Cases</th>
+                                <th>Recovery Rate</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recoveryAgentsBody">
+                            <!-- Recovery agents will be added dynamically -->
+                        </tbody>
+                    </table>
+                    <div class="action-bar">
+                        <button id="addRecoveryAgent" class="btn btn-primary">Add Agent</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Customer Management Section -->
+            <section id="customer-management" class="content-section">
+                <h1><i class="fas fa-users"></i> Customer Management</h1>
+                
+                <div class="section-tabs">
+                    <button class="tab-button active" data-tab="customer-list">Customer List</button>
+                    <button class="tab-button" data-tab="customer-details">Customer Details</button>
+                    <button class="tab-button" data-tab="communication-logs">Communication Logs</button>
+                </div>
+                
+                <div id="customer-list" class="tab-content active">
+                    <h2>Customer List</h2>
+                    <div class="search-bar">
+                        <input type="text" id="customerSearch" placeholder="Search customers...">
+                        <button id="customerSearchBtn" class="btn btn-search"><i class="fas fa-search"></i></button>
+                    </div>
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Active Loans</th>
+                                <th>Total Borrowed</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerListBody">
+                            <!-- Customers will be added dynamically -->
+                        </tbody>
+                    </table>
+                    <div class="action-bar">
+                        <button id="addCustomer" class="btn btn-primary">Add Customer</button>
+                    </div>
+                </div>
+                
+                <div id="customer-details" class="tab-content">
+                    <h2>Customer Details</h2>
+                    <div id="customerDetailsContent">
+                        <p class="no-selection">Select a customer to view details</p>
+                    </div>
+                </div>
+                
+                <div id="communication-logs" class="tab-content">
+                    <h2>Communication Logs</h2>
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <label for="communicationCustomerFilter">Customer:</label>
+                            <select id="communicationCustomerFilter">
+                                <option value="all">All Customers</option>
+                                <!-- Customers will be added dynamically -->
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="communicationType">Type:</label>
+                            <select id="communicationType">
+                                <option value="all">All Types</option>
+                                <option value="Email">Email</option>
+                                <option value="Phone">Phone</option>
+                                <option value="SMS">SMS</option>
+                                <option value="In-Person">In-Person</option>
+                            </select>
+                        </div>
+                        <button id="applyCommunicationFilter" class="btn btn-filter">Apply Filter</button>
+                    </div>
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Type</th>
+                                <th>Subject</th>
+                                <th>Initiated By</th>
+                                <th>Outcome</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="communicationLogsBody">
+                            <!-- Communication logs will be added dynamically -->
+                        </tbody>
+                    </table>
+                    <div class="action-bar">
+                        <button id="logCommunication" class="btn btn-primary">Log Communication</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reporting and Analytics Section -->
+            <section id="reporting" class="content-section">
+                <h1><i class="fas fa-chart-bar"></i> Reporting & Analytics</h1>
+                
+                <div class="section-tabs">
+                    <button class="tab-button active" data-tab="loan-performance">Loan Performance</button>
+                    <button class="tab-button" data-tab="repayment-trends">Repayment Trends</button>
+                    <button class="tab-button" data-tab="recovery-metrics">Recovery Metrics</button>
+                    <button class="tab-button" data-tab="customer-analysis">Customer Analysis</button>
+                </div>
+                
+                <div id="loan-performance" class="tab-content active">
+                    <h2>Loan Performance Report</h2>
+                    <div class="chart-filters">
+                        <div class="filter-group">
+                            <label for="loanPerformancePeriod">Period:</label>
+                            <select id="loanPerformancePeriod">
+                                <option value="month">This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                                <option value="all">All Time</option>
+                            </select>
+                        </div>
+                        <button id="generateLoanPerformance" class="btn btn-primary">Generate Report</button>
+                    </div>
+                    <div class="report-container">
+                        <div class="chart-row">
+                            <div class="chart-container">
+                                <h3>Loan Status Distribution</h3>
+                                <canvas id="loanStatusChart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <h3>Loan Purpose Distribution</h3>
+                                <canvas id="loanPurposeChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="report-metrics">
+                            <div class="metric-card">
+                                <h3>Total Loans</h3>
+                                <p id="totalLoansMetric">0</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Average Loan Amount</h3>
+                                <p id="avgLoanAmountMetric">₦0</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Default Rate</h3>
+                                <p id="defaultRateMetric">0%</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Average Term</h3>
+                                <p id="avgTermMetric">0 months</p>
+                            </div>
+                        </div>
+                        <div class="report-table-container">
+                            <h3>Loan Performance Summary</h3>
+                            <table class="report-table" id="loanPerformanceTable">
+                                <!-- Table will be filled dynamically -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="repayment-trends" class="tab-content">
+                    <h2>Repayment Trends</h2>
+                    <div class="chart-filters">
+                        <div class="filter-group">
+                            <label for="repaymentTrendPeriod">Period:</label>
+                            <select id="repaymentTrendPeriod">
+                                <option value="6months">Last 6 Months</option>
+                                <option value="year">Last Year</option>
+                                <option value="all">All Time</option>
+                            </select>
+                        </div>
+                        <button id="generateRepaymentTrends" class="btn btn-primary">Generate Report</button>
+                    </div>
+                    <div class="report-container">
+                        <div class="chart-row">
+                            <div class="chart-container">
+                                <h3>Monthly Repayments</h3>
+                                <canvas id="monthlyRepaymentsReportChart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <h3>On-Time vs Late Payments</h3>
+                                <canvas id="paymentTimingChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="report-metrics">
+                            <div class="metric-card">
+                                <h3>On-Time Rate</h3>
+                                <p id="onTimeRateMetric">0%</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Average Days Late</h3>
+                                <p id="avgDaysLateMetric">0 days</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Total Collected</h3>
+                                <p id="totalCollectedMetric">₦0</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Collection Rate</h3>
+                                <p id="collectionRateMetric">0%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="recovery-metrics" class="tab-content">
+                    <h2>Debt Recovery Metrics</h2>
+                    <div class="chart-filters">
+                        <div class="filter-group">
+                            <label for="recoveryMetricsPeriod">Period:</label>
+                            <select id="recoveryMetricsPeriod">
+                                <option value="month">This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                            </select>
+                        </div>
+                        <button id="generateRecoveryMetrics" class="btn btn-primary">Generate Report</button>
+                    </div>
+                    <div class="report-container">
+                        <div class="chart-row">
+                            <div class="chart-container">
+                                <h3>Recovery Performance by Agent</h3>
+                                <canvas id="agentPerformanceChart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <h3>Recovery by Action Type</h3>
+                                <canvas id="actionTypeChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="report-metrics">
+                            <div class="metric-card">
+                                <h3>Total Recovered</h3>
+                                <p id="totalRecoveredMetric">₦0</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Recovery Rate</h3>
+                                <p id="recoveryRateMetric">0%</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Avg. Recovery Time</h3>
+                                <p id="avgRecoveryTimeMetric">0 days</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Cost per Recovery</h3>
+                                <p id="costPerRecoveryMetric">₦0</p>
+                            </div>
+                        </div>
+                        <div class="report-table-container">
+                            <h3>Recovery Performance by Bucket</h3>
+                            <table class="report-table" id="recoveryBucketTable">
+                                <thead>
+                                    <tr>
+                                        <th>Overdue Bucket</th>
+                                        <th>Total Cases</th>
+                                        <th>Recovered Cases</th>
+                                        <th>Recovery Rate</th>
+                                        <th>Amount Recovered</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Will be populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="customer-analysis" class="tab-content">
+                    <h2>Customer Behavior Analysis</h2>
+                    <div class="chart-filters">
+                        <div class="filter-group">
+                            <label for="customerSegment">Segment:</label>
+                            <select id="customerSegment">
+                                <option value="all">All Customers</option>
+                                <option value="new">New Customers</option>
+                                <option value="repeat">Repeat Customers</option>
+                                <option value="delinquent">Delinquent Customers</option>
+                            </select>
+                        </div>
+                        <button id="generateCustomerAnalysis" class="btn btn-primary">Generate Report</button>
+                    </div>
+                    <div class="report-container">
+                        <div class="chart-row">
+                            <div class="chart-container">
+                                <h3>Customer Segments</h3>
+                                <canvas id="customerSegmentChart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <h3>Loan Purpose by Segment</h3>
+                                <canvas id="segmentPurposeChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-row">
+                            <div class="chart-container">
+                                <h3>Repayment Behavior by Segment</h3>
+                                <canvas id="segmentRepaymentChart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <h3>Customer Lifetime Value</h3>
+                                <canvas id="customerLTVChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="report-metrics">
+                            <div class="metric-card">
+                                <h3>Active Customers</h3>
+                                <p id="activeCustomersMetric">0</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Avg. Loans per Customer</h3>
+                                <p id="avgLoansPerCustomerMetric">0</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Customer Retention Rate</h3>
+                                <p id="customerRetentionMetric">0%</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Avg. Lifetime Value</h3>
+                                <p id="avgLTVMetric">₦0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings and Configuration Section -->
+            <section id="settings" class="content-section">
+                <h1><i class="fas fa-cog"></i> Settings & Configuration</h1>
+                
+                <div class="section-tabs">
+                    <button class="tab-button active" data-tab="user-management">User Management</button>
+                    <button class="tab-button" data-tab="access-control">Access Control</button>
+                    <button class="tab-button" data-tab="system-notifications">Notifications</button>
+                    <button class="tab-button" data-tab="integration-settings">Integrations</button>
+                </div>
+                
+                <div id="user-management" class="tab-content active">
+                    <h2>User Management</h2>
+                    <table class="settings-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Last Login</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userManagementBody">
+                            <!-- Users will be added dynamically -->
+                        </tbody>
+                    </table>
+                    <div class="action-bar">
+                        <button id="addUser" class="btn btn-primary">Add User</button>
+                    </div>
+                </div>
+                
+                <div id="access-control" class="tab-content">
+                    <h2>Role-Based Access Control</h2>
+                    <table class="settings-table">
+                        <thead>
+                            <tr>
+                                <th>Role</th>
+                                <th>Description</th>
+                                <th>Users</th>
+                                <th>Permissions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="roleManagementBody">
+                            <!-- Roles will be added dynamically -->
+                        </tbody>
+                    </table>
+                    <div class="action-bar">
+                        <button id="addRole" class="btn btn-primary">Add Role</button>
+                    </div>
+                </div>
+                
+                <div id="system-notifications" class="tab-content">
+                    <h2>System Notifications</h2>
+                    <form id="notificationSettingsForm" class="form-container">
+                        <h3>Email Notifications</h3>
+                        <div class="settings-group">
+                            <div class="setting-item">
+                                <label>
+                                    <input type="checkbox" id="notifyNewLoan" checked> 
+                                    New loan applications
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label>
+                                    <input type="checkbox" id="notifyPaymentDue" checked> 
+                                    Payment due reminders
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label>
+                                    <input type="checkbox" id="notifyPaymentReceived" checked> 
+                                    Payment received confirmations
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label>
+                                    <input type="checkbox" id="notifyOverduePayment" checked> 
+                                    Overdue payment alerts
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <h3>System Alerts</h3>
+                        <div class="settings-group">
+                            <div class="setting-item">
+                                <label>
+                                    <input type="checkbox" id="alertUserLogin" checked> 
+                                    User login activity
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label>
+                                    <input type="checkbox" id="alertSystemChanges" checked> 
+                                    System configuration changes
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label>
+                                    <input type="checkbox" id="alertDataBackup" checked> 
+                                    Data backup notifications
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <h3>Notification Recipients</h3>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="notificationEmails">Email Recipients (comma separated)</label>
+                                <input type="text" id="notificationEmails" value="admin@example.com">
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Save Settings</button>
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="integration-settings" class="tab-content">
+                    <h2>Integration Settings</h2>
+                    <div class="settings-container">
+                        <div class="settings-card">
+                            <h3>Payment Gateway</h3>
+                            <div class="settings-form">
+                                <div class="form-group">
+                                    <label for="paymentGateway">Gateway Provider</label>
+                                    <select id="paymentGateway">
+                                        <option value="paystack">Paystack</option>
+                                        <option value="flutterwave">Flutterwave</option>
+                                        <option value="stripe">Stripe</option>
+                                        <option value="manual">Manual Processing</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="apiKey">API Key</label>
+                                    <input type="password" id="apiKey" value="••••••••••••••••">
+                                </div>
+                                <div class="form-group">
+                                    <label for="secretKey">Secret Key</label>
+                                    <input type="password" id="secretKey" value="••••••••••••••••">
+                                </div>
+                                <div class="form-actions">
+                                    <button class="btn btn-primary">Save</button>
+                                    <button class="btn btn-secondary">Test Connection</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-card">
+                            <h3>SMS Gateway</h3>
+                            <div class="settings-form">
+                                <div class="form-group">
+                                    <label for="smsProvider">SMS Provider</label>
+                                    <select id="smsProvider">
+                                        <option value="twilio">Twilio</option>
+                                        <option value="africasTalking">Africa's Talking</option>
+                                        <option value="none">None</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="smsApiKey">API Key</label>
+                                    <input type="password" id="smsApiKey" value="••••••••••••••••">
+                                </div>
+                                <div class="form-group">
+                                    <label for="smsSenderId">Sender ID</label>
+                                    <input type="text" id="smsSenderId" value="LoanSys">
+                                </div>
+                                <div class="form-actions">
+                                    <button class="btn btn-primary">Save</button>
+                                    <button class="btn btn-secondary">Test SMS</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-card">
+                            <h3>Email Configuration</h3>
+                            <div class="settings-form">
+                                <div class="form-group">
+                                    <label for="smtpServer">SMTP Server</label>
+                                    <input type="text" id="smtpServer" value="smtp.example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="smtpPort">SMTP Port</label>
+                                    <input type="number" id="smtpPort" value="587">
+                                </div>
+                                <div class="form-group">
+                                    <label for="emailUsername">Username</label>
+                                    <input type="text" id="emailUsername" value="notifications@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="emailPassword">Password</label>
+                                    <input type="password" id="emailPassword" value="••••••••••••••••">
+                                </div>
+                                <div class="form-actions">
+                                    <button class="btn btn-primary">Save</button>
+                                    <button class="btn btn-secondary">Test Email</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Audit and Compliance Section -->
+            <section id="audit" class="content-section">
+                <h1><i class="fas fa-clipboard-check"></i> Audit & Compliance</h1>
+                
+                <div class="section-tabs">
+                    <button class="tab-button active" data-tab="audit-logs">Audit Logs</button>
+                    <button class="tab-button" data-tab="compliance-reporting">Compliance Reporting</button>
+                    <button class="tab-button" data-tab="regulatory-updates">Regulatory Updates</button>
+                    <button class="tab-button" data-tab="risk-management">Risk Management</button>
+                </div>
+                
+                <div id="audit-logs" class="tab-content active">
+                    <h2>Audit Logs</h2>
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <label for="auditEventType">Event Type:</label>
+                            <select id="auditEventType">
+                                <option value="all">All Events</option>
+                                <option value="login">Login/Logout</option>
+                                <option value="loan">Loan Management</option>
+                                <option value="payment">Payment Processing</option>
+                                <option value="customer">Customer Management</option>
+                                <option value="settings">System Settings</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="auditUser">User:</label>
+                            <select id="auditUser">
+                                <option value="all">All Users</option>
+                                <!-- Users will be dynamically added -->
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="auditDateRange">Date Range:</label>
+                            <input type="date" id="auditStartDate">
+                            <span>to</span>
+                            <input type="date" id="auditEndDate">
+                        </div>
+                        <button id="applyAuditFilter" class="btn btn-filter">Apply Filter</button>
+                    </div>
+                    <table class="loan-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>User</th>
+                                <th>Event Type</th>
+                                <th>Action</th>
+                                <th>Details</th>
+                                <th>IP Address</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditLogsBody">
+                            <!-- Audit logs will be added dynamically -->
+                        </tbody>
+                    </table>
+                    <div class="action-bar">
+                        <button id="exportAuditLogs" class="btn btn-primary">Export Logs</button>
+                    </div>
+                </div>
+                
+                <div id="compliance-reporting" class="tab-content">
+                    <h2>Compliance Reporting</h2>
+                    <div class="report-selection">
+                        <div class="report-card">
+                            <h3>KYC Compliance Report</h3>
+                            <p>Report on Know Your Customer compliance for all active customers.</p>
+                            <button class="btn btn-primary">Generate Report</button>
+                        </div>
+                        <div class="report-card">
+                            <h3>AML Risk Assessment</h3>
+                            <p>Anti-Money Laundering risk assessment for loan transactions.</p>
+                            <button class="btn btn-primary">Generate Report</button>
+                        </div>
+                        <div class="report-card">
+                            <h3>Interest Rate Compliance</h3>
+                            <p>Verify all loans comply with maximum interest rate regulations.</p>
+                            <button class="btn btn-primary">Generate Report</button>
+                        </div>
+                        <div class="report-card">
+                            <h3>Data Protection Audit</h3>
+                            <p>Audit of data protection and privacy compliance.</p>
+                            <button class="btn btn-primary">Generate Report</button>
+                        </div>
+                    </div>
+                    <h3>Scheduled Reports</h3>
+                    <table class="settings-table">
+                        <thead>
+                            <tr>
+                                <th>Report Name</th>
+                                <th>Frequency</th>
+                                <th>Last Generated</th>
+                                <th>Recipients</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scheduledReportsBody">
+                            <!-- Scheduled reports will be added dynamically -->
+                        </tbody>
+                    </table>
+                    <div class="action-bar">
+                        <button id="addScheduledReport" class="btn btn-primary">Schedule New Report</button>
+                    </div>
+                </div>
+                
+                <div id="regulatory-updates" class="tab-content">
+                    <h2>Regulatory Updates</h2>
+                    <div class="regulatory-alerts">
+                        <div class="alert-card">
+                            <div class="alert-icon"><i class="fas fa-exclamation-circle"></i></div>
+                            <div class="alert-content">
+                                <h3>New Interest Rate Regulations</h3>
+                                <p class="alert-date">Effective: April 15, 2025</p>
+                                <p>New regulations capping interest rates at 25% for all personal loans.</p>
+                                <div class="alert-actions">
+                                    <button class="btn btn-secondary">View Details</button>
+                                    <button class="btn btn-primary">Mark as Reviewed</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert-card">
+                            <div class="alert-icon"><i class="fas fa-info-circle"></i></div>
+                            <div class="alert-content">
+                                <h3>Updated KYC Requirements</h3>
+                                <p class="alert-date">Effective: June 1, 2025</p>
+                                <p>Additional ID verification required for loans above ₦500,000.</p>
+                                <div class="alert-actions">
+                                    <button class="btn btn-secondary">View Details</button>
+                                    <button class="btn btn-primary">Mark as Reviewed</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Compliance Calendar</h3>
+                    <div class="calendar-container" id="complianceCalendar">
+                        <!-- Calendar will be generated dynamically -->
+                    </div>
+                </div>
+                
+                <div id="risk-management" class="tab-content">
+                    <h2>Risk Management</h2>
+                    <div class="risk-dashboard">
+                        <div class="risk-metrics">
+                            <div class="metric-card">
+                                <h3>Risk Level</h3>
+                                <div class="risk-indicator medium">Medium</div>
+                            </div>
+                            <div class="metric-card">
+                                <h3>NPL Ratio</h3>
+                                <p>4.2%</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Default Rate</h3>
+                                <p>2.8%</p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Avg. Risk Score</h3>
+                                <p>685</p>
+                            </div>
+                        </div>
+                        <div class="chart-row">
+                            <div class="chart-container">
+                                <h3>Portfolio Risk Distribution</h3>
+                                <canvas id="riskDistributionChart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <h3>Risk Trend (6 Months)</h3>
+                                <canvas id="riskTrendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Risk Policy Management</h3>
+                    <table class="settings-table">
+                        <thead>
+                            <tr>
+                                <th>Policy Name</th>
+                                <th>Description</th>
+                                <th>Last Updated</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="riskPoliciesBody">
+                            <!-- Risk policies will be added dynamically -->
+                        </tbody>
+                    </table>
+                    <div class="action-bar">
+                        <button id="addRiskPolicy" class="btn btn-primary">Add Risk Policy</button>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
-    <script>
-        // Notification function
-        function showNotification(message, type) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type} show`;
-            
-            setTimeout(() => {
-                notification.className = 'notification';
-            }, 3000);
-        }
+    <!-- Modal Templates (Hidden by default) -->
+    <div id="modal-container" class="modal-container">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title">Modal Title</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Modal content will be dynamically inserted here -->
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <!-- Modal footer buttons will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
 
-        // Render pending loans
-        function renderPendingLoans() {
-            const pendingLoansBody = document.getElementById('pendingLoansBody');
-            pendingLoansBody.innerHTML = ''; // Clear existing rows
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Admin dashboard JavaScript -->
+    <script src="admin-integration.js" defer></script>
+    <script src="admin-dashboard.js" defer></script>
+    <script src="admin-dashboard1.js" defer></script>
 
-            // Retrieve pending loans from localStorage
-            const loans = JSON.parse(localStorage.getItem('pendingLoans')) || [];
-
-            loans.forEach((loan, index) => {
-                // Skip already processed loans
-                if (loan.status !== 'Pending') return;
-
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${loan.fullName}</td>
-                    <td>${loan.email}</td>
-                    <td>₦${loan.loanAmount}</td>
-                    <td>${loan.loanPurpose}</td>
-                    <td>${new Date(loan.submissionDate).toLocaleDateString()}</td>
-                    <td><span class="status-badge status-pending">${loan.status}</span></td>
-                    <td class="action-buttons">
-                        <button class="btn btn-approve" onclick="approveLoan(${loan.id})">Approve</button>
-                        <button class="btn btn-reject" onclick="rejectLoan(${loan.id})">Reject</button>
-                    </td>
-                `;
-                pendingLoansBody.appendChild(row);
-            });
-        }
-
-        // Approve loan
-        function approveLoan(loanId) {
-            const loans = JSON.parse(localStorage.getItem('pendingLoans')) || [];
-            const updatedLoans = loans.map(loan => {
-                if (loan.id === loanId) {
-                    loan.status = 'Approved';
-                    
-                    // Store in approved loans
-                    const approvedLoans = JSON.parse(localStorage.getItem('approvedLoans')) || [];
-                    approvedLoans.push(loan);
-                    localStorage.setItem('approvedLoans', JSON.stringify(approvedLoans));
-                }
-                return loan;
-            });
-
-            localStorage.setItem('pendingLoans', JSON.stringify(updatedLoans));
-            renderPendingLoans();
-            showNotification('Loan Approved', 'success');
-        }
-
-        // Reject loan
-        function rejectLoan(loanId) {
-            const loans = JSON.parse(localStorage.getItem('pendingLoans')) || [];
-            const updatedLoans = loans.map(loan => {
-                if (loan.id === loanId) {
-                    loan.status = 'Rejected';
-                    
-                    // Store in rejected loans
-                    const rejectedLoans = JSON.parse(localStorage.getItem('rejectedLoans')) || [];
-                    rejectedLoans.push(loan);
-                    localStorage.setItem('rejectedLoans', JSON.stringify(rejectedLoans));
-                }
-                return loan;
-            });
-
-            localStorage.setItem('pendingLoans', JSON.stringify(updatedLoans));
-            renderPendingLoans();
-            showNotification('Loan Rejected', 'error');
-        }
-
-        // Initial render
-        document.addEventListener('DOMContentLoaded', renderPendingLoans);
-    </script>
 </body>
 </html>
